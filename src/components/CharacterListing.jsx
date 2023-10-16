@@ -8,18 +8,18 @@ function CharacterListing() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("asc");
-  const [selectedGender, setSelectedGender] = useState("any");
+  const [selectedGender, setSelectedGender] = useState("Any");
   const [selectedRace, setSelectedRace] = useState("Any");
   const [sortedData, setSortedData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [charactersPerPage, setCharactersPerPage] = useState(10);
 
   useEffect(() => {
-    fetchData()
-  },[])
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
-    console.log("🚀 Requests .......")
+    console.log("🚀 Requests .......");
     try {
       const response = await axios.get("https://the-one-api.dev/v2/character", {
         headers: {
@@ -27,14 +27,13 @@ function CharacterListing() {
         },
       });
       const characterData = response.data.docs;
+      console.log("🚀 ~ file: CharacterListing.jsx:30 ~ fetchData ~ characterData:", characterData)
       setData(characterData);
       handleFilterAndSort();
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
- 
 
   const handleGenderFilter = (gender) => {
     setSelectedGender(gender);
@@ -43,11 +42,12 @@ function CharacterListing() {
   const handleRaceFilter = (race) => {
     setSelectedRace(race);
   };
+
   const handleFilterAndSort = () => {
     const filteredData = data.filter(
       (character) =>
-        character.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (selectedGender === "any" || character.gender === selectedGender) &&
+        character.name.toLowerCase().startsWith(searchQuery.toLowerCase()) &&
+        (selectedGender === "Any" || character.gender === selectedGender) &&
         (selectedRace === "Any" || character.race === selectedRace)
     );
 
@@ -101,7 +101,7 @@ function CharacterListing() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <img src={search} alt=""/>
+            <img src={search} alt="search" />
           </div>
           <span></span>
           <p className="label-sort">Sort By</p>
@@ -110,7 +110,7 @@ function CharacterListing() {
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
           >
-            <option value="any" disabled>
+            <option value="Any" disabled>
               by name (asc / dsc)
             </option>
             <option value="asc">asc</option>
@@ -124,7 +124,7 @@ function CharacterListing() {
             value={selectedRace}
             onChange={(e) => handleRaceFilter(e.target.value)}
           >
-            <option value="any" disabled>
+            <option value="Any" disabled>
               list of races, multiection
             </option>
             <option value="Human">Human</option>
@@ -138,12 +138,12 @@ function CharacterListing() {
             value={selectedGender}
             onChange={(e) => handleGenderFilter(e.target.value)}
           >
-            <option value="any" disabled>
+            <option value="Any" disabled>
               male/female/any
             </option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-            <option value="">Any</option>
+            <option value="Any">Any</option>
           </select>
           <span></span>
 
@@ -162,14 +162,19 @@ function CharacterListing() {
               </tr>
             </thead>
             <tbody>
-              {currentCharacters.map((character, index) => (
+              {currentCharacters?.map((character, index) => (
                 <tr key={character._id}>
-                  <td>{index}</td>
+                  <td>{index + 1}</td>
                   <td>{character.name}</td>
-                  <td>{character.race}</td>
+                  <td>{character.race }</td>
                   <td>{character.gender}</td>
                   <td>
-                    <Link className="Details-text" to={`/details/${character._id}`}>Details ˃˃</Link>
+                    <Link
+                      className="Details-text"
+                      to={`/details/${character._id}`}
+                    >
+                      Details ˃˃
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -179,15 +184,34 @@ function CharacterListing() {
         <hr />
         <footer>
           <div className="pagination">
+            <button
+              onClick={() => paginate(1)}
+              className={currentPage === 1 ? "active" : ""}
+            >
+              1
+            </button>
+
+            {startPage > 3 && <span>...</span>}
             {Array.from({ length: endPage - startPage + 1 }).map((_, index) => (
               <button
-                key={startPage + index}
-                onClick={() => paginate(startPage + index)}
-                className={currentPage === startPage + index ? "active" : ""}
+                key={startPage + index + 1}
+                onClick={() => paginate(startPage + index + 1)}
+                className={
+                  currentPage === startPage + index + 1 ? "active" : ""
+                }
               >
-                {startPage + index}
+                {startPage + index + 1}
               </button>
             ))}
+            {endPage < totalPages - 1 && <span>...</span>}
+            {totalPages > 2 && (
+              <button
+                onClick={() => paginate(totalPages)}
+                className={currentPage === totalPages ? "active" : ""}
+              >
+                {totalPages}
+              </button>
+            )}
           </div>
 
           <div className="limit-container">
@@ -205,6 +229,7 @@ function CharacterListing() {
               <option value="70">70</option>
               <option value="80">80</option>
               <option value="90">90</option>
+              <option value="100">100</option>
             </select>
           </div>
         </footer>

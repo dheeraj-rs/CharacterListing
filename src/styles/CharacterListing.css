@@ -2,6 +2,7 @@
 .main-container {
     padding: 20px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 5px;
     
@@ -104,10 +105,10 @@ footer {
 .limit-container {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 select {
-    padding: 10px 30px;
-    margin-left: 20px;
+    padding: 10px;
     cursor: pointer;
 }

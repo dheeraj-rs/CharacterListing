@@ -35,7 +35,7 @@ function CharacterDetails() {
             <main className='table-container'>
                 <table className='detail-table'>
                     <tbody>
-                        {character &&character.map((user)=> (
+                        {character &&character?.map((user)=> (
                             <div key={user._id}>
                                 <tr>
                                     <td>Name</td>
