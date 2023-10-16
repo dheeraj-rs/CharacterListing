@@ -1,0 +1,216 @@
+import React, { useEffect, useState } from "react";
+import "../styles/CharacterListing.css";
+import search from "../assets/search.png";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+function CharacterListing() {
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("asc");
+  const [selectedGender, setSelectedGender] = useState("any");
+  const [selectedRace, setSelectedRace] = useState("Any");
+  const [sortedData, setSortedData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [charactersPerPage, setCharactersPerPage] = useState(10);
+
+  useEffect(() => {
+    fetchData()
+  },[])
+
+  const fetchData = async () => {
+    console.log("🚀 Requests .......")
+    try {
+      const response = await axios.get("https://the-one-api.dev/v2/character", {
+        headers: {
+          Authorization: "Bearer MkIs5B5Li54W9BMpv1Mk",
+        },
+      });
+      const characterData = response.data.docs;
+      setData(characterData);
+      handleFilterAndSort();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+ 
+
+  const handleGenderFilter = (gender) => {
+    setSelectedGender(gender);
+  };
+
+  const handleRaceFilter = (race) => {
+    setSelectedRace(race);
+  };
+  const handleFilterAndSort = () => {
+    const filteredData = data.filter(
+      (character) =>
+        character.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (selectedGender === "any" || character.gender === selectedGender) &&
+        (selectedRace === "Any" || character.race === selectedRace)
+    );
+
+    const newSortedData = [...filteredData];
+    newSortedData.sort((a, b) => {
+      if (sortOption === "asc") {
+        return a.name.localeCompare(b.name);
+      } else if (sortOption === "dsc") {
+        return b.name.localeCompare(a.name);
+      }
+    });
+
+    setSortedData(newSortedData);
+  };
+
+  const pagesToShow = 5;
+  const margin = Math.floor(pagesToShow / 2);
+
+  const totalPages = Math.ceil(sortedData.length / charactersPerPage);
+
+  let startPage = Math.max(1, currentPage - margin);
+  let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
+
+  if (endPage - startPage + 1 < pagesToShow) {
+    startPage = Math.max(1, endPage - pagesToShow + 1);
+  }
+
+  const indexOfLastCharacter = currentPage * charactersPerPage;
+  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
+  const currentCharacters = sortedData.slice(
+    indexOfFirstCharacter,
+    indexOfLastCharacter
+  );
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  return (
+    <section>
+      <main>
+        <header>
+          <p>Character</p>
+        </header>
+        <div className="main-container">
+          <p>Search</p>
+          <div className="search-input">
+            <input
+              type="text"
+              placeholder="by name"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <img src={search} alt=""/>
+          </div>
+          <span></span>
+          <p className="label-sort">Sort By</p>
+          <select
+            className="sort-option"
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+          >
+            <option value="any" disabled>
+              by name (asc / dsc)
+            </option>
+            <option value="asc">asc</option>
+            <option value="dsc">dsc</option>
+          </select>
+        </div>
+        <div className="main-container">
+          <p>Race</p>
+          <select
+            className="race-option"
+            value={selectedRace}
+            onChange={(e) => handleRaceFilter(e.target.value)}
+          >
+            <option value="any" disabled>
+              list of races, multiection
+            </option>
+            <option value="Human">Human</option>
+            <option value="Elf">Elf</option>
+            <option value="Dwarf">Dwarf</option>
+            <option value="Hobbit">Hobbit</option>
+          </select>
+          <p className="gender-label">Gender</p>
+          <select
+            className="gender-option"
+            value={selectedGender}
+            onChange={(e) => handleGenderFilter(e.target.value)}
+          >
+            <option value="any" disabled>
+              male/female/any
+            </option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="">Any</option>
+          </select>
+          <span></span>
+
+          <button onClick={handleFilterAndSort}>Submit</button>
+        </div>
+        <hr />
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Race</th>
+                <th>Gender</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentCharacters.map((character, index) => (
+                <tr key={character._id}>
+                  <td>{index}</td>
+                  <td>{character.name}</td>
+                  <td>{character.race}</td>
+                  <td>{character.gender}</td>
+                  <td>
+                    <Link className="Details-text" to={`/details/${character._id}`}>Details ˃˃</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <hr />
+        <footer>
+          <div className="pagination">
+            {Array.from({ length: endPage - startPage + 1 }).map((_, index) => (
+              <button
+                key={startPage + index}
+                onClick={() => paginate(startPage + index)}
+                className={currentPage === startPage + index ? "active" : ""}
+              >
+                {startPage + index}
+              </button>
+            ))}
+          </div>
+
+          <div className="limit-container">
+            <p>Limit</p>
+            <select
+              value={charactersPerPage}
+              onChange={(e) => setCharactersPerPage(e.target.value)}
+            >
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+              <option value="60">60</option>
+              <option value="70">70</option>
+              <option value="80">80</option>
+              <option value="90">90</option>
+            </select>
+          </div>
+        </footer>
+      </main>
+    </section>
+  );
+}
+
+export default CharacterListing;

@@ -1,0 +1,113 @@
+
+.main-container {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    
+}
+input{
+    padding: 8px;
+}
+
+.main-container span {
+    flex: 1;
+}
+
+.main-container button {
+    padding: 10px 10%;
+    cursor: pointer;
+}
+.search-input{
+    width: 60%;
+    position: relative;
+}
+.search-input input {
+    width: 100%;
+}
+.search-input img {
+   position: absolute;
+   right: 10px;
+   top: 5px;
+   width: 25px;
+   height: 25px;
+}
+
+.label-sort{
+   text-wrap:nowrap;
+}
+
+.sort-option {
+    width: 30%;
+}
+
+.race-option {
+    width: 30%;
+}
+
+.gender-label {
+    padding-left: 5%;
+}
+
+.gender-option {
+    width: 30%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: start;
+}
+
+.Details-text{
+    text-decoration: none;
+    color: #505050;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+    height: 12%;
+}
+
+.pagination {
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination button {
+    padding: 2px 8px 2px 8px;
+    background-color: #3a3a3ab6;
+    color: #fff;
+    border: none;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.limit-container {
+    display: flex;
+    align-items: center;
+}
+
+select {
+    padding: 10px 30px;
+    margin-left: 20px;
+    cursor: pointer;
+}
