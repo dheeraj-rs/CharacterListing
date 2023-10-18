@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import "../styles/CharacterDetails.css";
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 function CharacterDetails() {
     const { characterId } = useParams();
     const [character, setCharacter] = useState(null);
-    console.log("🚀 ~ file: CharacterDetails.jsx:9 ~ CharacterDetails ~ character:", character)
 
     useEffect(() => {
         const fetchCharacterDetails = async () => {
             try {
                 const response = await axios.get(`https://the-one-api.dev/v2/character/${characterId}`, {
                     headers: {
-                        "Authorization": "Bearer MkIs5B5Li54W9BMpv1Mk"
+                        "Authorization": `${API_BASE_URL}`
                     }
                 });
 

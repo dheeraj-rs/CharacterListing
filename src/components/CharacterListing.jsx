@@ -43,10 +43,17 @@ function CharacterListing() {
     setSelectedRace(race);
   };
 
+  const handleSearchSubmit = () => {
+    handleFilterAndSort()
+    setSearchQuery("");
+
+  };
+
+
   const handleFilterAndSort = () => {
     const filteredData = data.filter(
       (character) =>
-        character.name.toLowerCase().startsWith(searchQuery.toLowerCase()) &&
+      character.name.toLowerCase().startsWith(searchQuery.toLowerCase())&&
         (selectedGender === "Any" || character.gender === selectedGender) &&
         (selectedRace === "Any" || character.race === selectedRace)
     );
@@ -61,6 +68,15 @@ function CharacterListing() {
     });
 
     setSortedData(newSortedData);
+  };
+
+
+  const handleReset = () => {
+    setSearchQuery("");
+    setSortOption("Any");
+    setSelectedGender("Any");
+    setSelectedRace("Any");
+    handleFilterAndSort()
   };
 
   const pagesToShow = 4;
@@ -101,7 +117,7 @@ function CharacterListing() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <img src={search} alt="search" />
+            <img src={search} alt="search"  onClick={handleSearchSubmit} />
           </div>
           <span></span>
           <div className="sort-container">
@@ -135,6 +151,7 @@ function CharacterListing() {
             <option value="Elf">Elf</option>
             <option value="Dwarf">Dwarf</option>
             <option value="Hobbit">Hobbit</option>
+            <option value="Men">Men</option>
           </select>
           </div>
           <div className="gender-container">
@@ -155,6 +172,9 @@ function CharacterListing() {
           <span></span>
           <button className="submit-btn" onClick={handleFilterAndSort}>
             Submit
+          </button>
+          <button className="reset-btn" onClick={handleReset}>
+            Reset
           </button>
         </div>
         <hr />
