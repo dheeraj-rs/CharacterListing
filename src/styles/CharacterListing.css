@@ -1,32 +1,22 @@
-
 .main-container {
     padding: 20px;
     display: flex;
-    flex-wrap: wrap;
+    gap: 20px;  
+}
+.search-container{
+    min-width: 60%;
+    display: flex;
     align-items: center;
-    gap: 5px;
-    
-}
-input{
-    padding: 8px;
-}
-
-.main-container span {
-    flex: 1;
-}
-
-.main-container button {
-    padding: 10px 10%;
-    cursor: pointer;
-}
-.search-input{
-    width: 60%;
+    gap: 10px;
     position: relative;
 }
-.search-input input {
+
+.search-container input {
     width: 100%;
+    padding: 8px;
+
 }
-.search-input img {
+.search-container img {
    position: absolute;
    right: 10px;
    top: 5px;
@@ -34,25 +24,63 @@ input{
    height: 25px;
 }
 
-.label-sort{
-   text-wrap:nowrap;
+
+.label{
+    text-wrap:nowrap;
+ }
+
+.main-container span {
+    flex: 1;
+}
+
+.sort-container{
+    min-width: 30%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .sort-option {
-    width: 30%;
+    width: 100%;
 }
 
+.race-container{
+    min-width: 30%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .race-option {
-    width: 30%;
+    width: 100%;
 }
-
-.gender-label {
-    padding-left: 5%;
+.gender-container{
+    min-width: 30%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .gender-option {
-    width: 30%;
+    width: 100%;
 }
+
+.submit-btn{
+    padding: 10px 10%;
+    cursor: pointer;
+    min-width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#fff, #fff)
+    padding-box,
+    linear-gradient(225deg,#70369d,#487de7,#faeb36)border-box;
+    border:1px solid transparent;
+}
+.btn-submit:hover{
+    border:3px solid transparent;
+
+}
+
 
 table {
     width: 100%;
@@ -72,7 +100,7 @@ td {
     text-align: start;
 }
 
-.Details-text{
+.details-text{
     text-decoration: none;
     color: #505050;
 }
@@ -84,10 +112,10 @@ footer {
     background-color: #f2f2f2;
     padding: 10px;
     height: 12%;
+
 }
 
 .pagination {
-
     display: flex;
     align-items: center;
     gap: 15px;
@@ -104,11 +132,46 @@ footer {
 
 .limit-container {
     display: flex;
+    justify-content: end;
     align-items: center;
     gap: 10px;
 }
 
-select {
-    padding: 10px;
-    cursor: pointer;
-}
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        gap: 10px; 
+    }
+    .search-container{
+        width: 100%;   
+    }
+    .sort-container{
+        width: 100%;
+    }
+    .race-container{
+        width: 100%;
+       
+    }
+    .gender-container{
+        width: 100%;
+    }
+    .btn-submit{
+        width: 100%;
+    }
+    footer {
+   flex-direction: column;
+   align-items: center;
+   gap: 20px;
+    
+    }
+    .limit-container {
+        width: 100%;
+        display: flex;
+    }
+    .limit-div{
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: 10px;
+    }
+  }

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function CharacterListing() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("asc");
+  const [sortOption, setSortOption] = useState("Any");
   const [selectedGender, setSelectedGender] = useState("Any");
   const [selectedRace, setSelectedRace] = useState("Any");
   const [sortedData, setSortedData] = useState([]);
@@ -16,7 +16,7 @@ function CharacterListing() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  },[]);
 
   const fetchData = async () => {
     console.log("🚀 Requests .......");
@@ -63,7 +63,7 @@ function CharacterListing() {
     setSortedData(newSortedData);
   };
 
-  const pagesToShow = 5;
+  const pagesToShow = 4;
   const margin = Math.floor(pagesToShow / 2);
 
   const totalPages = Math.ceil(sortedData.length / charactersPerPage);
@@ -93,8 +93,8 @@ function CharacterListing() {
           <p>Character</p>
         </header>
         <div className="main-container">
-          <p>Search</p>
-          <div className="search-input">
+          <div className="search-container">
+            <p className="label">Search</p>
             <input
               type="text"
               placeholder="by name"
@@ -104,20 +104,24 @@ function CharacterListing() {
             <img src={search} alt="search" />
           </div>
           <span></span>
-          <p className="label-sort">Sort By</p>
-          <select
-            className="sort-option"
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-          >
-            <option value="Any" disabled>
-              by name (asc / dsc)
-            </option>
-            <option value="asc">asc</option>
-            <option value="dsc">dsc</option>
-          </select>
+          <div className="sort-container">
+            <p className="label">Sort By</p>
+            <select
+              className="sort-option"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="Any" disabled>
+                by name (asc / dsc)
+              </option>
+              <option value="asc">asc</option>
+              <option value="dsc">dsc</option>
+            </select>
+          </div>
         </div>
+
         <div className="main-container">
+          <div className="race-container">
           <p>Race</p>
           <select
             className="race-option"
@@ -132,7 +136,9 @@ function CharacterListing() {
             <option value="Dwarf">Dwarf</option>
             <option value="Hobbit">Hobbit</option>
           </select>
-          <p className="gender-label">Gender</p>
+          </div>
+          <div className="gender-container">
+          <p className="label">Gender</p>
           <select
             className="gender-option"
             value={selectedGender}
@@ -145,9 +151,11 @@ function CharacterListing() {
             <option value="Female">Female</option>
             <option value="Any">Any</option>
           </select>
+          </div>
           <span></span>
-
-          <button onClick={handleFilterAndSort}>Submit</button>
+          <button className="submit-btn" onClick={handleFilterAndSort}>
+            Submit
+          </button>
         </div>
         <hr />
         <div className="table-container">
@@ -166,11 +174,11 @@ function CharacterListing() {
                 <tr key={character._id}>
                   <td>{index + 1}</td>
                   <td>{character.name}</td>
-                  <td>{character.race }</td>
+                  <td>{character.race}</td>
                   <td>{character.gender}</td>
                   <td>
                     <Link
-                      className="Details-text"
+                      className="details-text"
                       to={`/details/${character._id}`}
                     >
                       Details ˃˃
@@ -215,6 +223,7 @@ function CharacterListing() {
           </div>
 
           <div className="limit-container">
+            <div className="limit-div">
             <p>Limit</p>
             <select
               value={charactersPerPage}
@@ -231,6 +240,7 @@ function CharacterListing() {
               <option value="90">90</option>
               <option value="100">100</option>
             </select>
+            </div>
           </div>
         </footer>
       </main>

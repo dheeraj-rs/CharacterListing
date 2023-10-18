@@ -6,6 +6,12 @@ section {
   border: 1px solid #50505090;
   height: 100dvh;
 }
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
 main {
   height: 100%;
 }
@@ -23,14 +29,26 @@ hr {
 .table-container {
   height: 60%;
   padding: 20px;
-  overflow-x: scroll;
+  overflow-y: scroll;
 }
-
-.detail-section {
-  display: flex;
-  flex-direction: column;
-}
-
 .detail-section span {
   flex: 1;
+}
+
+select {
+  padding: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  section {
+    border: 1px solid #50505090;
+    height: auto;
+  }
+  .table-container {
+    height: auto;
+    padding: 10px;
+    overflow-x: scroll;
+  }
+  
 }
