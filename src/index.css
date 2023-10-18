@@ -5,6 +5,7 @@
 section {
   border: 1px solid #50505090;
   height: 100dvh;
+  overflow: hidden;
 }
 .detail-section {
   display: flex;
