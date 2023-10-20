@@ -5,7 +5,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const ANY = "Any";
-const INITIAL_VALUE = 10;
+const INITIAL_PERPAGE = 10;
+const INITIAL_PAGE = 1;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CharacterListing() {
   const [data, setData] = useState([]);
@@ -14,8 +16,8 @@ function CharacterListing() {
   const [selectedGender, setSelectedGender] = useState(ANY);
   const [selectedRace, setSelectedRace] = useState(ANY);
   const [sortedData, setSortedData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [charactersPerPage, setCharactersPerPage] = useState(INITIAL_VALUE);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [charactersPerPage, setCharactersPerPage] = useState(INITIAL_PERPAGE);
 
   useEffect(() => {
     fetchData();
@@ -23,14 +25,17 @@ function CharacterListing() {
 
   useEffect(() => {
     handleFilterAndSort();
-  }, [data, searchQuery, sortOption, selectedGender, selectedRace]);
+  }, [data]);
+
+    // useEffect(() => {
+  //   handleFilterAndSort();
+  // }, [data, searchQuery, sortOption, selectedGender, selectedRace]);
 
   const fetchData = async () => {
-    console.log("🚀 Requests .......");
     try {
       const response = await axios.get("https://the-one-api.dev/v2/character", {
         headers: {
-          Authorization: "Bearer MkIs5B5Li54W9BMpv1Mk",
+          Authorization: `${API_BASE_URL}`,
         },
       });
       const characterData = response.data.docs;
@@ -38,6 +43,12 @@ function CharacterListing() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    handleFilterAndSort();
+    setSearchQuery("");
   };
 
   const handleFilterAndSort = () => {
@@ -90,7 +101,7 @@ function CharacterListing() {
           <p>Character</p>
         </header>
         <div className="main-container">
-          <div className="search-container">
+          <form onSubmit={handleSearchSubmit} className="search-container">
             <p className="label">Search</p>
             <input
               type="text"
@@ -98,8 +109,10 @@ function CharacterListing() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <img src={search} alt="search" />
-          </div>
+            <button type="submit">
+              <img src={search} alt="search" className="search-img" />
+            </button>
+          </form>
           <span></span>
           <div className="sort-container">
             <p className="label">Sort By</p>
@@ -108,9 +121,7 @@ function CharacterListing() {
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
-              <option value={ANY} disabled>
-                by name (asc / dsc)
-              </option>
+              <option value={ANY}>by name (asc / dsc)</option>
               <option value="asc">asc</option>
               <option value="dsc">dsc</option>
             </select>
@@ -125,9 +136,7 @@ function CharacterListing() {
               value={selectedRace}
               onChange={(e) => setSelectedRace(e.target.value)}
             >
-              <option value={ANY} disabled>
-                list of races, multiection
-              </option>
+              <option value={ANY}>list of races, multiection</option>
               <option value="Human">Human</option>
               <option value="Elf">Elf</option>
               <option value="Dwarf">Dwarf</option>
@@ -142,14 +151,16 @@ function CharacterListing() {
               value={selectedGender}
               onChange={(e) => setSelectedGender(e.target.value)}
             >
-              <option value={ANY} disabled>
-                male/female/any
-              </option>
+              <option value={ANY}>male/female/any</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value={ANY}>Any</option>
             </select>
           </div>
+          <span></span>
+          <button className="submit-btn" onClick={handleFilterAndSort}>
+            Submit
+          </button>
         </div>
         <hr />
         <div className="table-container">
@@ -229,10 +240,6 @@ function CharacterListing() {
                 <option value="40">40</option>
                 <option value="50">50</option>
                 <option value="60">60</option>
-                <option value="70">70</option>
-                <option value="80">80</option>
-                <option value="90">90</option>
-                <option value="100">100</option>
               </select>
             </div>
           </div>
