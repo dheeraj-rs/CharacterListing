@@ -34,9 +34,8 @@ function CharacterDetails() {
             </header>
             <main className='table-container'>
                 <table className='detail-table'>
-                    <tbody>
-                        {character &&character?.map((user)=> (
-                            <div key={user._id}>
+                    {character &&character?.map((user)=> (
+                            <tbody key={user._id}>
                                 <tr>
                                     <td>Name</td>
                                     <td>{user.name}</td>
@@ -77,9 +76,8 @@ function CharacterDetails() {
                                     <td>Death</td>
                                     <td>{user.death}</td>
                                 </tr>
-                            </div>
+                            </tbody>
                         ))}
-                    </tbody>
                 </table>
             </main>
             <span></span>
@@ -87,7 +85,7 @@ function CharacterDetails() {
                <Link className='close-btn' to="/">Close</Link>
             </div>
         </section>
-    );
-}
+    )}
+    
 
 export default CharacterDetails;

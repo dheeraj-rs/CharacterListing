@@ -4,8 +4,8 @@ import search from "../assets/search.png";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const ANY = "Any"
-const INITIAL_VALUE = 10
+const ANY = "Any";
+const INITIAL_VALUE = 10;
 
 function CharacterListing() {
   const [data, setData] = useState([]);
@@ -19,11 +19,11 @@ function CharacterListing() {
 
   useEffect(() => {
     fetchData();
-  },[]);
+  }, []);
 
   useEffect(() => {
     handleFilterAndSort();
-  },[data]);
+  }, [data, searchQuery, sortOption, selectedGender, selectedRace]);
 
   const fetchData = async () => {
     console.log("🚀 Requests .......");
@@ -34,32 +34,16 @@ function CharacterListing() {
         },
       });
       const characterData = response.data.docs;
-      console.log("🚀 ~ file: CharacterListing.jsx:30 ~ fetchData ~ characterData:", characterData)
       setData(characterData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const handleGenderFilter = (gender) => {
-    setSelectedGender(gender);
-  };
-
-  const handleRaceFilter = (race) => {
-    setSelectedRace(race);
-  };
-
-  const handleSearchSubmit = () => {
-    handleFilterAndSort()
-    setSearchQuery("");
-
-  };
-
-
   const handleFilterAndSort = () => {
     const filteredData = data.filter(
       (character) =>
-      character.name.toLowerCase().startsWith(searchQuery.toLowerCase())&&
+        character.name.toLowerCase().startsWith(searchQuery.toLowerCase()) &&
         (selectedGender === ANY || character.gender === selectedGender) &&
         (selectedRace === ANY || character.race === selectedRace)
     );
@@ -74,15 +58,6 @@ function CharacterListing() {
     });
 
     setSortedData(newSortedData);
-  };
-
-
-  const handleReset = () => {
-    setSearchQuery("");
-    setSortOption(ANY);
-    setSelectedGender(ANY);
-    setSelectedRace(ANY);
-    handleFilterAndSort()
   };
 
   const pagesToShow = 4;
@@ -123,7 +98,7 @@ function CharacterListing() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <img src={search} alt="search"  onClick={handleSearchSubmit} />
+            <img src={search} alt="search" />
           </div>
           <span></span>
           <div className="sort-container">
@@ -144,44 +119,37 @@ function CharacterListing() {
 
         <div className="main-container">
           <div className="race-container">
-          <p>Race</p>
-          <select
-            className="race-option"
-            value={selectedRace}
-            onChange={(e) => handleRaceFilter(e.target.value)}
-          >
-            <option value={ANY} disabled>
-              list of races, multiection
-            </option>
-            <option value="Human">Human</option>
-            <option value="Elf">Elf</option>
-            <option value="Dwarf">Dwarf</option>
-            <option value="Hobbit">Hobbit</option>
-            <option value="Men">Men</option>
-          </select>
+            <p>Race</p>
+            <select
+              className="race-option"
+              value={selectedRace}
+              onChange={(e) => setSelectedRace(e.target.value)}
+            >
+              <option value={ANY} disabled>
+                list of races, multiection
+              </option>
+              <option value="Human">Human</option>
+              <option value="Elf">Elf</option>
+              <option value="Dwarf">Dwarf</option>
+              <option value="Hobbit">Hobbit</option>
+              <option value="Men">Men</option>
+            </select>
           </div>
           <div className="gender-container">
-          <p className="label">Gender</p>
-          <select
-            className="gender-option"
-            value={selectedGender}
-            onChange={(e) => handleGenderFilter(e.target.value)}
-          >
-            <option value={ANY} disabled>
-              male/female/any
-            </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value={ANY}>Any</option>
-          </select>
+            <p className="label">Gender</p>
+            <select
+              className="gender-option"
+              value={selectedGender}
+              onChange={(e) => setSelectedGender(e.target.value)}
+            >
+              <option value={ANY} disabled>
+                male/female/any
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value={ANY}>Any</option>
+            </select>
           </div>
-          <span></span>
-          <button className="submit-btn" onClick={handleFilterAndSort}>
-            Submit
-          </button>
-          <button className="reset-btn" onClick={handleReset}>
-            Reset
-          </button>
         </div>
         <hr />
         <div className="table-container">
@@ -250,22 +218,22 @@ function CharacterListing() {
 
           <div className="limit-container">
             <div className="limit-div">
-            <p>Limit</p>
-            <select
-              value={charactersPerPage}
-              onChange={(e) => setCharactersPerPage(e.target.value)}
-            >
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="40">40</option>
-              <option value="50">50</option>
-              <option value="60">60</option>
-              <option value="70">70</option>
-              <option value="80">80</option>
-              <option value="90">90</option>
-              <option value="100">100</option>
-            </select>
+              <p>Limit</p>
+              <select
+                value={charactersPerPage}
+                onChange={(e) => setCharactersPerPage(e.target.value)}
+              >
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+                <option value="60">60</option>
+                <option value="70">70</option>
+                <option value="80">80</option>
+                <option value="90">90</option>
+                <option value="100">100</option>
+              </select>
             </div>
           </div>
         </footer>
