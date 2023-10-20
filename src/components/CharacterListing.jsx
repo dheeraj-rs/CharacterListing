@@ -4,19 +4,26 @@ import search from "../assets/search.png";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+const ANY = "Any"
+const INITIAL_VALUE = 10
+
 function CharacterListing() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("Any");
-  const [selectedGender, setSelectedGender] = useState("Any");
-  const [selectedRace, setSelectedRace] = useState("Any");
+  const [sortOption, setSortOption] = useState(ANY);
+  const [selectedGender, setSelectedGender] = useState(ANY);
+  const [selectedRace, setSelectedRace] = useState(ANY);
   const [sortedData, setSortedData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [charactersPerPage, setCharactersPerPage] = useState(10);
+  const [charactersPerPage, setCharactersPerPage] = useState(INITIAL_VALUE);
 
   useEffect(() => {
     fetchData();
   },[]);
+
+  useEffect(() => {
+    handleFilterAndSort();
+  },[data]);
 
   const fetchData = async () => {
     console.log("🚀 Requests .......");
@@ -29,7 +36,6 @@ function CharacterListing() {
       const characterData = response.data.docs;
       console.log("🚀 ~ file: CharacterListing.jsx:30 ~ fetchData ~ characterData:", characterData)
       setData(characterData);
-      handleFilterAndSort();
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -54,8 +60,8 @@ function CharacterListing() {
     const filteredData = data.filter(
       (character) =>
       character.name.toLowerCase().startsWith(searchQuery.toLowerCase())&&
-        (selectedGender === "Any" || character.gender === selectedGender) &&
-        (selectedRace === "Any" || character.race === selectedRace)
+        (selectedGender === ANY || character.gender === selectedGender) &&
+        (selectedRace === ANY || character.race === selectedRace)
     );
 
     const newSortedData = [...filteredData];
@@ -73,9 +79,9 @@ function CharacterListing() {
 
   const handleReset = () => {
     setSearchQuery("");
-    setSortOption("Any");
-    setSelectedGender("Any");
-    setSelectedRace("Any");
+    setSortOption(ANY);
+    setSelectedGender(ANY);
+    setSelectedRace(ANY);
     handleFilterAndSort()
   };
 
@@ -127,7 +133,7 @@ function CharacterListing() {
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
-              <option value="Any" disabled>
+              <option value={ANY} disabled>
                 by name (asc / dsc)
               </option>
               <option value="asc">asc</option>
@@ -144,7 +150,7 @@ function CharacterListing() {
             value={selectedRace}
             onChange={(e) => handleRaceFilter(e.target.value)}
           >
-            <option value="Any" disabled>
+            <option value={ANY} disabled>
               list of races, multiection
             </option>
             <option value="Human">Human</option>
@@ -161,12 +167,12 @@ function CharacterListing() {
             value={selectedGender}
             onChange={(e) => handleGenderFilter(e.target.value)}
           >
-            <option value="Any" disabled>
+            <option value={ANY} disabled>
               male/female/any
             </option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-            <option value="Any">Any</option>
+            <option value={ANY}>Any</option>
           </select>
           </div>
           <span></span>
